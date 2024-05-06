@@ -21,6 +21,12 @@ pip install -r requirements.txt
 python main.py
 ```
 
+### 截图
+![](./docs/screenshot1.png)
+![](./docs/screenshot2.png)
+![](./docs/screenshot3.png)
+
+
 ### 感谢
 
 [WeChatFerry](https://github.com/lich0821/WeChatFerry)

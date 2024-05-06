@@ -224,10 +224,10 @@ class Analyzer:
         self.filter_messages = []
         self.message_df: pd.DataFrame | None = None
 
-    def start_analysis(self, user_id: str, end_callback):
+    def start_analysis(self, user_id: str, end_callback, error_callback):
         self.end_callback = end_callback
         self.analysis_task = asyncio.create_task(
-            self.generate_analysis_task(user_id, end_callback)
+            self.generate_analysis_task(user_id, end_callback, error_callback=error_callback)
         )
 
     async def get_ai_result(self, user_id, username, password):
@@ -277,7 +277,7 @@ class Analyzer:
             res.append(message)
         return res
 
-    async def generate_analysis_task(self, user_id: str, end_callback):
+    async def generate_analysis_task(self, user_id: str, end_callback, error_callback):
         try:
             my_id = self.wechat_api.my_id
             # {'wxid': 'wxid_xxx', 'code': '', 'remark': '', 'name': 'xxx', 'country': '',
@@ -302,6 +302,7 @@ class Analyzer:
         except Exception as e:
             logging.error(f"generate_analysis_task error {e} {traceback.format_exc()}")
             await end_callback()
+            await error_callback(f"{e} {traceback.format_exc()}")
 
     def build_start_message(self, message: MessageData):
         if not hasattr(self, "build_start_message_finished"):

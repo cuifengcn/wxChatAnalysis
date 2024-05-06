@@ -198,6 +198,13 @@ class AnalysisView(ft.Column):
             )
         )
 
+        async def error_callback(message):
+            await self.page.show_dialog(
+                ft.AlertDialog(content=ft.Column([
+                    ft.Text(message)
+                ], tight=True))
+            )
+
         async def end_callback(views=None):
             if views:
                 # 成功才赋值
@@ -210,7 +217,7 @@ class AnalysisView(ft.Column):
                     await self.analysis_result.update_async()
                     await asyncio.sleep(0.1)
                 if ai_result:
-                    self.analysis_result.controls.append(ft.Text('AI总结'))
+                    self.analysis_result.controls.append(ft.Text("AI总结"))
                     self.analysis_result.controls.append(ai_result)
                     await self.analysis_result.update_async()
             self.page.close_dialog()
@@ -223,7 +230,7 @@ class AnalysisView(ft.Column):
             self.ai_username,
             self.ai_password,
         )
-        analyzer.start_analysis(user_id, end_callback)
+        analyzer.start_analysis(user_id, end_callback, error_callback=error_callback)
 
 
 class MessagesView(ft.Column):
